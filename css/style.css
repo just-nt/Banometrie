@@ -1,0 +1,793 @@
+/* Banometru: a notebook-page look (squared paper, red margin, spiral binding, washi tape). */
+
+:root {
+  --paper: #fbf8ee;
+  --grid-line: #cfe0ee;
+  --ink: #26324a;
+  --pen: #1f3a8a;
+  --muted: #4a5670;
+  --red: #e5584f;
+  --yellow: #ffe76a;
+  --pink: #ffb6c8;
+  --mint: #a8e6cf;
+
+  --font-handwriting: "Caveat", cursive;
+  --font-body: "Patrick Hand", "Comic Sans MS", sans-serif;
+
+  /* Slightly uneven corners so buttons look hand-cut, not perfectly rounded. */
+  --wobbly-corners: 14px 20px 12px 22px / 20px 12px 22px 14px;
+  --soft-shadow: 6px 6px 0 rgba(38, 50, 74, 0.15);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+a {
+  color: var(--ink);
+}
+
+a:hover {
+  color: #b4234f;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* ---------- The notebook page ---------- */
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Spiral binding: a thin metal wire that disappears into a small dark hole. */
+.binding {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 44px;
+  background-image:
+    linear-gradient(to bottom, transparent 16px, #9aa3b2 16px, #f4f6fa 19px, #7e8798 23px, transparent 23px),
+    radial-gradient(circle at 32px 20px, #4b4436 0 4px, #cfc6ae 4px 6px, transparent 6px);
+  background-size: 32px 56px, 40px 56px;
+  background-repeat: repeat-y;
+}
+
+/* When binding.js has drawn the real coils, the simple fallback drawing above is not needed. */
+.binding.has-coils {
+  background-image: none;
+}
+
+.coil {
+  display: block;
+  width: 100%;
+  height: 56px;
+}
+
+.coil-shadow {
+  opacity: 0.26;
+  filter: blur(2px);
+}
+
+.margin-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: clamp(48px, 7vw, 100px);
+  width: 6px;
+  border-left: 2px solid var(--red);
+  border-right: 2px solid var(--red);
+  opacity: 0.65;
+}
+
+.content {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 24px clamp(16px, 4vw, 48px) 48px clamp(72px, 10vw, 140px);
+}
+
+main > section {
+  margin-top: 56px;
+}
+
+/* ---------- Navigation ---------- */
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1;
+  text-decoration: none;
+  color: var(--pen);
+}
+
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 2px dashed var(--ink);
+  border-radius: var(--wobbly-corners);
+  text-decoration: none;
+}
+
+.nav-links a[aria-current="page"] {
+  background: var(--yellow);
+  border-style: solid;
+  transform: rotate(-2deg);
+}
+
+.menu-toggle {
+  display: none;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: var(--wobbly-corners);
+  box-shadow: 3px 3px 0 rgba(38, 50, 74, 0.25);
+}
+
+.menu-toggle .icon-close {
+  display: none;
+}
+
+.menu-toggle[aria-expanded="true"] .icon-open {
+  display: none;
+}
+
+.menu-toggle[aria-expanded="true"] .icon-close {
+  display: block;
+}
+
+/* ---------- Shared pieces ---------- */
+
+.highlight-yellow,
+.highlight-pink {
+  padding-right: 8px;
+}
+
+.highlight-yellow {
+  background: linear-gradient(transparent 58%, var(--yellow) 58%, var(--yellow) 92%, transparent 92%);
+}
+
+.highlight-pink {
+  background: linear-gradient(transparent 58%, var(--pink) 58%, var(--pink) 92%, transparent 92%);
+}
+
+.page-title {
+  font-size: clamp(56px, 9vw, 96px);
+  line-height: 1;
+  color: var(--pen);
+}
+
+.squiggle {
+  display: block;
+  margin-top: 4px;
+}
+
+.section-title {
+  font-size: clamp(44px, 6vw, 60px);
+  color: var(--pen);
+}
+
+.intro {
+  margin-top: 16px;
+  max-width: 640px;
+  font-size: 22px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: var(--wobbly-corners);
+  font-size: 22px;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--pen);
+  color: #ffffff;
+  box-shadow: 4px 4px 0 rgba(38, 50, 74, 0.25);
+}
+
+.btn-primary:hover {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.btn-dashed {
+  border: 2px dashed var(--ink);
+  background: var(--paper);
+}
+
+.btn-yellow {
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(38, 50, 74, 0.25);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* A strip of washi tape. Colour and tilt are set per element with --tape and --tilt. */
+.tape {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  width: 96px;
+  height: 26px;
+  margin-left: -48px;
+  transform: rotate(var(--tilt, 0deg));
+  background: repeating-linear-gradient(45deg, var(--tape) 0 9px, rgba(255, 255, 255, 0.6) 9px 18px);
+}
+
+/* ---------- Home ---------- */
+
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 56px;
+}
+
+.hero-text {
+  flex: 1 1 460px;
+  min-width: 0;
+}
+
+.hero-card-wrap {
+  flex: 1 1 340px;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.tag {
+  display: inline-block;
+  padding: 6px 22px;
+  background: rgba(255, 182, 200, 0.85);
+  transform: rotate(-2deg);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+}
+
+.hero h1 {
+  margin: 20px 0 16px;
+  font-size: clamp(72px, 12vw, 148px);
+  line-height: 0.95;
+  color: var(--pen);
+}
+
+.hero-lead {
+  margin-bottom: 32px;
+  max-width: 520px;
+  font-size: 24px;
+}
+
+.equation-card {
+  position: relative;
+  max-width: 420px;
+  padding: 40px 32px 28px;
+  background: #ffffff;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  transform: rotate(2deg);
+  box-shadow: 8px 8px 0 rgba(38, 50, 74, 0.15);
+}
+
+.equation-label {
+  margin-bottom: 8px;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.equation {
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1.3;
+}
+
+.equation span {
+  padding: 0 8px;
+}
+
+.equation-note {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.equation-note svg {
+  flex: none;
+}
+
+.note-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 32px;
+}
+
+.note {
+  position: relative;
+  display: block;
+  padding: 36px 24px 24px;
+  background: var(--note-bg);
+  text-decoration: none;
+  transform: rotate(var(--note-tilt, 0deg));
+  box-shadow: 5px 5px 0 rgba(38, 50, 74, 0.15);
+}
+
+.note-number {
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  font-size: 44px;
+  line-height: 1;
+  color: #b4234f;
+}
+
+.note h3 {
+  margin: 4px 0 8px;
+  font-size: 34px;
+}
+
+.note p {
+  font-size: 19px;
+}
+
+.download-band {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 3px dashed var(--ink);
+  border-radius: 10px;
+}
+
+.download-band .band-text {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.download-band h2 {
+  margin-bottom: 4px;
+  font-size: 44px;
+  color: var(--pen);
+}
+
+.download-band p {
+  font-size: 21px;
+}
+
+/* ---------- Team ---------- */
+
+.team-grid {
+  margin-top: 64px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 48px 28px;
+}
+
+.polaroid {
+  position: relative;
+  padding: 16px 16px 20px;
+  background: #ffffff;
+  transform: rotate(var(--tilt, 0deg));
+  box-shadow: var(--soft-shadow);
+}
+
+.polaroid .tape {
+  transform: rotate(var(--tape-tilt, 0deg));
+}
+
+.photo {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8e4d9;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.polaroid h2 {
+  margin-top: 12px;
+  font-size: 34px;
+}
+
+.polaroid p {
+  color: var(--muted);
+}
+
+/* ---------- Objectives ---------- */
+
+.subject {
+  font-size: 22px;
+  color: var(--muted);
+}
+
+.subject span {
+  padding: 0 8px;
+  border-bottom: 2px solid var(--ink);
+  color: var(--ink);
+}
+
+.objective-list {
+  max-width: 880px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.objective {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid var(--ink);
+  border-radius: var(--wobbly-corners);
+  box-shadow: var(--soft-shadow);
+}
+
+.objective .tape {
+  left: auto;
+  right: 48px;
+  margin-left: 0;
+}
+
+.objective-head {
+  display: contents;
+}
+
+.objective-number {
+  flex: 0 0 72px;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--number-bg);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1;
+}
+
+.objective-body {
+  flex: 1 1 360px;
+  min-width: 0;
+}
+
+.objective h2 {
+  margin-bottom: 8px;
+  font-size: 42px;
+}
+
+.objective-description {
+  margin-bottom: 16px;
+}
+
+.objective-measure {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: var(--muted);
+}
+
+.objective-measure svg {
+  flex: none;
+  margin-top: 3px;
+}
+
+/* ---------- Doodles: small hand-drawn decorations attached to the element they sit on ---------- */
+
+.has-doodles {
+  position: relative;
+}
+
+.doodle {
+  position: absolute;
+  pointer-events: none;
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.doodle-label {
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  font-size: 44px;
+  color: #b4234f;
+}
+
+/* Side doodles sit outside the objective cards, so they need a wide screen. */
+@media (max-width: 1200px) {
+  .doodle-side {
+    display: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .doodle-large {
+    display: none;
+  }
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  margin-top: 80px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+/* ---------- Phone layout ---------- */
+
+@media (max-width: 700px) {
+  body {
+    font-size: 19px;
+  }
+
+  .binding {
+    width: 32px;
+    background-image:
+      linear-gradient(to bottom, transparent 16px, #9aa3b2 16px, #f4f6fa 19px, #7e8798 23px, transparent 23px),
+      radial-gradient(circle at 26px 20px, #4b4436 0 3.5px, #cfc6ae 3.5px 5px, transparent 5px);
+    background-size: 26px 56px, 32px 56px;
+  }
+
+  .margin-line {
+    left: 42px;
+    width: 5px;
+  }
+
+  .content {
+    padding: 16px 16px 32px 62px;
+  }
+
+  main > section {
+    margin-top: 44px;
+  }
+
+  .brand {
+    font-size: 40px;
+  }
+
+  /* Hide the links behind the hamburger only when JavaScript is available to open them. */
+  .has-js .menu-toggle {
+    display: flex;
+  }
+
+  .has-js .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px;
+    background: #ffffff;
+    border: 2px solid var(--ink);
+    border-radius: var(--wobbly-corners);
+    box-shadow: 5px 5px 0 rgba(38, 50, 74, 0.15);
+  }
+
+  .has-js .nav-links.is-open {
+    display: flex;
+  }
+
+  .hero {
+    gap: 40px;
+  }
+
+  .hero h1 {
+    font-size: 72px;
+  }
+
+  .hero-lead {
+    font-size: 21px;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .equation {
+    font-size: 36px;
+  }
+
+  .download-band {
+    padding: 24px 20px;
+  }
+
+  .download-band h2 {
+    font-size: 38px;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 16px;
+  }
+
+  .polaroid {
+    padding: 10px 10px 14px;
+  }
+
+  .polaroid h2 {
+    margin-top: 8px;
+    font-size: 26px;
+  }
+
+  .polaroid p {
+    font-size: 17px;
+  }
+
+  .objective {
+    padding: 24px 20px 20px;
+    gap: 12px;
+  }
+
+  .objective-number {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+    font-size: 34px;
+  }
+
+  .objective h2 {
+    font-size: 34px;
+  }
+
+  .objective-body {
+    flex-basis: 100%;
+  }
+}
+
+/* ---------- Entrance effect: a soft shadow lifts and the page content rises into place ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* A gentle dark veil over the whole page that fades away, like a lamp slowly turning on. */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(38, 50, 74, 0.18) 0%, rgba(38, 50, 74, 0.42) 100%);
+    animation: veil-lifts 1.2s ease-out forwards;
+  }
+
+  .site-header,
+  .site-footer {
+    animation: fade-in 0.8s ease-out both;
+  }
+
+  /* Each section starts a little later than the one before, so the page "writes itself" top to bottom. */
+  main > section {
+    animation: rise-in 0.9s ease-out both;
+  }
+
+  main > section:nth-child(1) { animation-delay: 0.1s; }
+  main > section:nth-child(2) { animation-delay: 0.25s; }
+  main > section:nth-child(3) { animation-delay: 0.4s; }
+  main > section:nth-child(4) { animation-delay: 0.55s; }
+
+  /* The binding settles in: each coil swings into place one after another, and its shadow
+     fades in a moment later, so the metal looks rounded. */
+  .coil {
+    transform-origin: 0 50%;
+    animation: coil-swings-in 0.7s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+    animation-delay: calc(var(--i) * 70ms);
+  }
+
+  .coil-shadow {
+    animation: coil-shadow-fades-in 1s ease-out both;
+    animation-delay: calc(var(--i) * 70ms + 250ms);
+  }
+
+  @keyframes coil-swings-in {
+    from {
+      opacity: 0;
+      transform: translateX(-28px) rotate(-12deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes coil-shadow-fades-in {
+    from {
+      opacity: 0;
+      transform: translate(6px, 10px);
+    }
+    to {
+      opacity: 0.26;
+      transform: none;
+    }
+  }
+
+  @keyframes veil-lifts {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes rise-in {
+    from {
+      opacity: 0;
+      transform: translateY(18px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
