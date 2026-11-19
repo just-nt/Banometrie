@@ -6,8 +6,8 @@
   <title>Pagina nu există - Banometru</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap" rel="stylesheet">
-  <!-- 404.html can be shown at any URL depth, so these paths must start from the site root.
-       If the site lives at username.github.io/repo-name/, change /css/ to /repo-name/css/ and "/" to "/repo-name/". -->
+  <!-- 404.html can be shown at any URL depth (for example /team/oops/), so every path here must start from the site root.
+       If the site lives at username.github.io/repo-name/, put /repo-name in front of each path that starts with "/". -->
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -16,16 +16,62 @@
     <div class="margin-line" aria-hidden="true"></div>
 
     <div class="content">
+      <header class="site-header">
+        <nav class="site-nav" aria-label="Meniu principal">
+          <a class="brand" href="/">Banometru</a>
+        </nav>
+      </header>
+
       <main>
-        <section>
-          <h1 class="page-title"><span class="highlight-pink">Hopa!</span></h1>
-          <p class="intro">Pagina pe care o cauți nu există. Poate am șters-o cu radiera.</p>
-        </section>
-        <section class="button-row">
-          <a class="btn btn-primary" href="/">Înapoi acasă</a>
+        <section class="hero">
+          <div class="hero-text has-doodles">
+            <svg class="doodle doodle-large" style="top: -30px; right: 6%; --tilt: 12deg" width="54" height="54" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4 L29 18 L44 19 L32 28 L36 43 L24 34 L12 43 L16 28 L4 19 L19 18 Z" fill="#FFE76A" stroke="#26324A" stroke-width="3" stroke-linejoin="round"/></svg>
+            <div class="tag">Eroare 404</div>
+            <h1><span class="highlight-pink">Hopa!</span></h1>
+            <p class="hero-lead">Pagina pe care o cauți nu există. Poate am șters-o cu radiera sau poate adresa a fost scrisă greșit.</p>
+            <div class="button-row">
+              <a class="btn btn-primary" href="/">Înapoi acasă</a>
+              <a class="btn btn-dashed" href="/objective/">Vezi obiectivele</a>
+            </div>
+          </div>
+
+          <div class="hero-card-wrap">
+            <div class="equation-card has-doodles">
+              <div class="tape" style="--tape: rgba(255, 182, 200, 0.9); --tilt: -4deg" aria-hidden="true"></div>
+
+              <!-- A pencil eraser, with a few crumbs, because the page was "erased". -->
+              <svg class="doodle" style="top: -44px; right: -26px; --tilt: 14deg" width="96" height="62" viewBox="0 0 96 62" stroke="#26324A" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+                <rect x="6" y="14" width="80" height="34" rx="9" fill="#FFB6C8"/>
+                <path d="M6 23 Q6 14 15 14 H40 V48 H15 Q6 48 6 39 Z" fill="#CFE3FF"/>
+                <circle cx="20" cy="56" r="2" fill="#26324A" stroke="none"/>
+                <circle cx="31" cy="58" r="1.6" fill="#26324A" stroke="none"/>
+                <circle cx="12" cy="58" r="1.4" fill="#26324A" stroke="none"/>
+              </svg>
+
+              <!-- A big hand-drawn question mark. -->
+              <div class="doodle doodle-label" style="bottom: -34px; left: -26px; font-size: 84px; line-height: 1; --tilt: -12deg" aria-hidden="true">?</div>
+
+              <p class="equation-label">Exercițiul zilei:</p>
+              <p class="equation">
+                <span style="background: #a8e6cf">pagina</span>
+                &minus;
+                <span style="background: #ffb6c8">adresa greșită</span>
+                =
+                <span style="background: #ffe76a">404</span>
+              </p>
+              <div class="equation-note">
+                <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="26" fill="#FFD65C" stroke="#26324A" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="none" stroke="#26324A" stroke-width="2" stroke-dasharray="4 4"/><text x="32" y="39" text-anchor="middle" font-family="Caveat, cursive" font-weight="700" font-size="22" fill="#26324A">lei</text></svg>
+                <p>(nu-i nicio problemă, mai verificăm o dată)</p>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
+
+      <footer class="site-footer">Banometru &middot; proiect școlar &middot; făcut cu pixuri colorate</footer>
     </div>
   </div>
+
+  <script src="/js/binding.js"></script>
 </body>
 </html>
