@@ -545,6 +545,129 @@ main > section {
   margin-top: 3px;
 }
 
+/* ---------- 404 page: the error is "corrected" like a homework answer ---------- */
+
+.error-code {
+  position: relative;
+  display: inline-block;
+  margin: 28px 0 8px 24px;
+}
+
+.error-number {
+  position: relative;
+  display: inline-block;
+}
+
+.hero .error-code h1 {
+  margin: 0;
+  font-size: clamp(110px, 14vw, 168px);
+  line-height: 0.95;
+}
+
+/* The red pen circle drawn around the number; it stretches to fit however big the number is. */
+.error-circle {
+  position: absolute;
+  left: -26px;
+  top: -18px;
+  width: calc(100% + 52px);
+  height: calc(100% + 36px);
+  pointer-events: none;
+}
+
+.teacher-note {
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  line-height: 1;
+  color: #c0392b;
+  transform: rotate(var(--tilt, 0deg));
+}
+
+.error-code .teacher-note {
+  position: absolute;
+  left: calc(100% + 34px);
+  top: 8px;
+  width: 190px;
+  font-size: 38px;
+  --tilt: 7deg;
+}
+
+.error-lead {
+  margin: 28px 0 32px;
+  max-width: 520px;
+  font-size: 24px;
+}
+
+.problem-label {
+  margin-bottom: 8px;
+  font-size: 18px;
+  color: var(--muted);
+}
+
+.problem-text {
+  margin-bottom: 18px;
+  font-family: var(--font-handwriting);
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1.2;
+}
+
+.answer-line {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 21px;
+}
+
+.answer-line span {
+  flex: 1;
+  height: 1em;
+  border-bottom: 2px dashed var(--ink);
+}
+
+.problem-card .teacher-note {
+  margin-top: 16px;
+  font-size: 32px;
+  line-height: 1.1;
+  --tilt: -3deg;
+}
+
+@media (max-width: 700px) {
+  .hero .error-code h1 {
+    font-size: 128px;
+  }
+
+  .error-code {
+    margin: 28px 0 0 14px;
+  }
+
+  .error-circle {
+    left: -18px;
+    top: -14px;
+    width: calc(100% + 36px);
+    height: calc(100% + 28px);
+  }
+
+  .error-code .teacher-note {
+    position: static;
+    width: auto;
+    margin: 14px 0 0 76px;
+    font-size: 34px;
+  }
+
+  .error-lead {
+    margin: 20px 0 24px;
+    font-size: 21px;
+  }
+
+  .problem-text {
+    font-size: 32px;
+  }
+
+  .problem-card .teacher-note {
+    font-size: 28px;
+  }
+}
+
 /* ---------- Doodles: small hand-drawn decorations attached to the element they sit on ---------- */
 
 .has-doodles {
